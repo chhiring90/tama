@@ -2,13 +2,13 @@ const fs = require('fs');
 const path = require('path');
 const { Client, Collection } = require('discord.js');
 const dotenv = require('dotenv');
-const { cooldown } = require('./commands/fun/ping');
 dotenv.config();
 
 const { TAMA_TOKEN, PREFIX } = process.env;
 const client = new Client();
 client.commands = new Collection();
 client.cooldowns = new Collection();
+
 
 const commandFolders = fs
 	.readdirSync(path.join(__dirname, 'commands'));
@@ -28,17 +28,22 @@ client.once('ready', function () {
 });
 
 client.on('message', message => {
+	// Cooking commands
 	if (!message.content.startsWith(PREFIX) || message.author.bot) return;
 	const args = message.content.slice(PREFIX.length).trim().split(/ +/);
 	const commandName = args.shift().toLocaleLowerCase();
 
-	if (!client.commands.has(commandName)) return;
-	const command = client.commands.get(commandName);
+	const command = client.commands.get(commandName)
+		|| client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
-	if (command.guildOnly && !message.channel.type === 'dm') {
+	if (!command) return;
+
+	// Exclude DM
+	if (command.guildOnly && message.channel.type === 'dm') {
 		return message.reply('I can\'t execute the command inside DM!');
 	}
 
+	// Args
 	if (command.args && !args.length) {
 		let reply = `You didn't provide any arguments, ${message.author}!`;
 
@@ -48,6 +53,7 @@ client.on('message', message => {
 		return message.channel.send(reply);
 	}
 
+	// Cooldown
 	const { cooldowns } = client;
 
 	if (!cooldowns.has(command.name)) {
@@ -67,10 +73,10 @@ client.on('message', message => {
 		}
 	}
 
-	console.log(client.cooldowns);
 	timestamps.set(message.author.id, now);
 	setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 
+	// Executing commands
 	try {
 		command.execute(message, args);
 	} catch (err) {
