@@ -31,7 +31,7 @@ client.on('message', message => {
 	// Cooking commands
 	if (!message.content.startsWith(PREFIX) || message.author.bot) return;
 	const args = message.content.slice(PREFIX.length).trim().split(/ +/);
-	const commandName = args.shift().toLocaleLowerCase();
+	const commandName = args.shift().toLowerCase();
 
 	const command = client.commands.get(commandName)
 		|| client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
@@ -41,6 +41,13 @@ client.on('message', message => {
 	// Exclude DM
 	if (command.guildOnly && message.channel.type === 'dm') {
 		return message.reply('I can\'t execute the command inside DM!');
+	}
+
+	if (command.permission) {
+		const authorPerms = message.channel.permissionsFor(message.author);
+		if (!authorPerms || !authorPerms.has(command.permissions)) {
+			return message.reply('You can\'t execute the command');
+		}
 	}
 
 	// Args
