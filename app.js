@@ -1,13 +1,14 @@
 const fs = require('fs');
 const path = require('path');
-const { Client, Collection } = require('discord.js');
+const { Client, Collection, MessageEmbed } = require('discord.js');
 const dotenv = require('dotenv');
 dotenv.config();
 
-const { TAMA_TOKEN, PREFIX } = process.env;
+const { TAMA_TOKEN } = process.env;
 const client = new Client();
 client.commands = new Collection();
 client.cooldowns = new Collection();
+
 const commandFolders = fs
 	.readdirSync(path.join(__dirname, 'commands'));
 
@@ -33,3 +34,7 @@ for (const file of eventFiles) {
 }
 
 client.login(TAMA_TOKEN);
+
+process.on('unhandledRejection', error => {
+	console.error('Unhandled promise rejection:', error);
+});
