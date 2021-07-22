@@ -4,8 +4,8 @@ module.exports = {
 	name: 'play',
 	description: 'plays Music from youtube',
 	async execute(message, args) {
-		const { musciQueue } = message.client;
-		const musicServerQueue = musciQueue.get(message.guild.id);
+		const { musicQueue } = message.client;
+		const musicServerQueue = musicQueue.get(message.guild.id);
 
 		const { channel } = message.member.voice;
 		if (!channel) return message.channel.send('You need to be in a voice channel to play this music');
@@ -30,17 +30,17 @@ module.exports = {
 				playing: true,
 			};
 
-			musciQueue.set(message.guild.id, queueContruct);
+			musicQueue.set(message.guild.id, queueContruct);
 			queueContruct.songs.push(song);
 
 			try {
 				const connection = await channel.join();
 				queueContruct.connection = connection;
-				await this.play(message.guild, queueContruct.songs[0], musciQueue);
+				await this.play(message.guild, queueContruct.songs[0], musicQueue);
 				return;
 			} catch (err) {
 				console.log(err);
-				this.musciQueue.delete(message.guild.id);
+				this.musicQueue.delete(message.guild.id);
 				return message.channel.send(err);
 			}
 		}
@@ -48,19 +48,21 @@ module.exports = {
 		musicServerQueue.songs.push(song);
 		return message.channel.send(`${song.title} has been added to the queue`);
 	},
-	async play(guild, song, musciQueue) {
+	async play(guild, song, musicQueue) {
 		try {
-			const musicServerQueue = musciQueue.get(guild.id);
+			if(!musicQueue) return;
+			const musicServerQueue = musicQueue.get(guild.id);
 
 			if (!song) {
 				musicServerQueue.voiceChannel.leave();
-				musciQueue.delete(guild.id);
+				musicQueue.delete(guild.id);
 				return;
 			}
 
 			const dispatcher = await musicServerQueue.connection;
 			dispatcher.play(ytdl(song.url))
 				.on('finish', () => {
+					if(!musicServerQueue.songs) return;
 					musicServerQueue.songs.shift();
 					this.play(guild, musicServerQueue.songs[0]);
 				})
