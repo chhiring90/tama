@@ -50,7 +50,7 @@ module.exports = {
 	},
 	async play(guild, song, musicQueue) {
 		try {
-			if(!musicQueue) return;
+			if (!musicQueue) return;
 			const musicServerQueue = musicQueue.get(guild.id);
 
 			if (!song) {
@@ -62,7 +62,7 @@ module.exports = {
 			const dispatcher = await musicServerQueue.connection;
 			dispatcher.play(ytdl(song.url))
 				.on('finish', () => {
-					if(!musicServerQueue.songs) return;
+					if (!musicServerQueue.songs) return;
 					musicServerQueue.songs.shift();
 					this.play(guild, musicServerQueue.songs[0]);
 				})
