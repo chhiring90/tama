@@ -1,7 +1,9 @@
+const ytdl = require('ytdl-core');
+
 module.exports = {
 	name: 'skip',
 	description: 'Skips current playing music',
-	execute(message) {
+	async execute(message) {
 		const musicServerQueue = message.client.musicQueue.get(message.guild.id);
 
 		if (!message.member.voice.channel) {
@@ -9,6 +11,11 @@ module.exports = {
 		}
 
 		if (!musicServerQueue) return message.channel.send('There is no song that I could stop');
-		musicServerQueue.connection.dispatcher.end('Skipped Current Music!');
+		musicServerQueue.connection.dispatcher.pause();
+		musicServerQueue.songs.shift();
+		const dispatcher = await musicServerQueue.connection;
+		dispatcher
+			.play(ytdl(musicServerQueue.songs[0].url))
+			.on('error', (err) => console.log('error', err));
 	},
 };

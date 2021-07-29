@@ -31,7 +31,7 @@ module.exports = {
 			let reply = `You didn't provide any arguments, ${message.author}!`;
 
 			if (command.usage) {
-				reply += `\nThe proper usuage would be: \`${PREFIX}${command} ${command.usage}\``;
+				reply += `\nThe proper usuage would be: \`${PREFIX}${command.name} ${command.usage}\``;
 			}
 			return message.channel.send(reply);
 		}

@@ -3,6 +3,8 @@ const ytdl = require('ytdl-core');
 module.exports = {
 	name: 'play',
 	description: 'plays Music from youtube',
+	args: true,
+	usage: '[<command> <musicname>]',
 	async execute(message, args) {
 		const { musicQueue } = message.client;
 		const musicServerQueue = musicQueue.get(message.guild.id);
