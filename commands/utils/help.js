@@ -26,18 +26,18 @@ module.exports = {
 				});
 		}
 
-		const name = args[0].toLowerCase();
-		const command = commands.get(name) || commands.find(c => c.aliases && c.aliases.includes(name));
+		const tag = args[0].toLowerCase();
+		const command = commands.get(tag) || commands.find(c => c.aliases && c.aliases.includes(tag));
 
 		if (!command) return message.reply('that\'s not a valid command');
 
-		data.push(`**Name:** ${command.name}`);
+		const { name, aliases, description, usage, cooldown } = command;
 
-		if (command.aliases) data.push(`**Alises:** ${command.aliases.join(',')}`);
-		if (command.description) data.push(`**Description:** ${command.description}`);
-		if (command.usuage) data.push(`**Usuage:** ${PREFIX}${command.name} ${command.usuage}`);
-
-		data.push(`**Cooldown:** ${command.cooldown || 3} second(s)`);
+		data.push(`**Name:** ${name}`);
+		if (aliases) data.push(`**Alises:** ${aliases.join(',')}`);
+		if (description) data.push(`**Description:** ${description}`);
+		if (usage) data.push(`**Usage:** ${PREFIX}${name} ${usage}`);
+		data.push(`**Cooldown:** ${cooldown || 3} second(s)`);
 
 		message.channel.send(data, { split: true });
 	},

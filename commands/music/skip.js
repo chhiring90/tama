@@ -5,6 +5,7 @@ module.exports = {
 	description: 'Skips current playing music',
 	async execute(message) {
 		const musicServerQueue = message.client.musicQueue.get(message.guild.id);
+		const { songs } = musicServerQueue;
 
 		if (!message.member.voice.channel) {
 			return message.channel.send('You have to be in the voice channel to stop the music!');
@@ -12,10 +13,11 @@ module.exports = {
 
 		if (!musicServerQueue) return message.channel.send('There is no song that I could stop');
 		musicServerQueue.connection.dispatcher.pause();
-		musicServerQueue.songs.shift();
+		const skippedSong = songs.shift();
 		const dispatcher = await musicServerQueue.connection;
 		dispatcher
-			.play(ytdl(musicServerQueue.songs[0].url))
+			.play(ytdl(songs[0].url))
 			.on('error', (err) => console.log('error', err));
+		message.channel.send(`Skipped **${skippedSong.title}** \n Playing **${songs[0].title}**`);
 	},
 };
