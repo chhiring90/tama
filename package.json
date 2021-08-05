@@ -19,6 +19,7 @@
     "ndb": "^1.1.5",
     "node-opus": "^0.3.3",
     "opusscript": "0.0.8",
+    "youtube-search-api": "^1.0.10",
     "ytdl-core": "^4.9.0"
   },
   "devDependencies": {

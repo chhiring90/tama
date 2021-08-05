@@ -9,6 +9,7 @@ const client = new Client();
 client.commands = new Collection();
 client.cooldowns = new Collection();
 client.musicQueue = new Collection();
+client.musicList = new Collection();
 
 // Commands
 const commandFolders = fs

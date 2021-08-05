@@ -1,4 +1,5 @@
 const ytdl = require('ytdl-core');
+const ytsearch = require('youtube-search-api');
 
 module.exports = {
 	name: 'play',
@@ -6,7 +7,7 @@ module.exports = {
 	args: true,
 	usage: '[<command> <musicname>]',
 	async execute(message, args) {
-		const { musicQueue } = message.client;
+		const { musicQueue, musicList } = message.client;
 		const musicServerQueue = musicQueue.get(message.guild.id);
 
 		const { channel } = message.member.voice;
@@ -17,7 +18,9 @@ module.exports = {
 		if (!permission.has('CONNECT')) return message.channel.send('I need permission to join voice channel');
 		if (!permission.has('SPEAK')) return message.channel.send('I need permission to speak in voice channel');
 
-		const songInfo = await ytdl.getInfo(args[0]);
+		if (!musicList.size) return this.showLists(message, args, musicList);
+
+		const songInfo = await ytdl.getInfo(musicList.get(args[0] * 1).id);
 		const song = {
 			title: songInfo.videoDetails.title,
 			url: songInfo.videoDetails.video_url,
@@ -49,6 +52,24 @@ module.exports = {
 
 		musicServerQueue.songs.push(song);
 		return message.channel.send(`${song.title} has been added to the queue`);
+	},
+	async showLists(message, keyword, musicList) {
+		const listArr = [];
+		const list = await ytsearch.GetListByKeyword(keyword.join(' '));
+		list.items.slice(0, 5).map((music, idx) => {
+			const { id, title, length } = music;
+			return musicList.set(idx + 1, {
+				id,
+				title,
+				length: length.simpleText,
+			});
+		});
+
+		listArr.push('**List of Musics**');
+		musicList.map((music, idx) => listArr.push(`**${idx})** ${music.title} ${music.length}`));
+		listArr.push('Select 1-5 to play music command **[!play 1]**');
+
+		return message.channel.send(listArr, { split: true });
 	},
 	async play(guild, song, musicQueue) {
 		try {
