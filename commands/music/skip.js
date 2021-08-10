@@ -8,16 +8,17 @@ module.exports = {
 		const { songs } = musicServerQueue;
 
 		if (!message.member.voice.channel) {
-			return message.channel.send('You have to be in the voice channel to stop the music!');
+			return message.channel.send('You have to be in the voice channel to skip the music!');
 		}
 
-		if (!musicServerQueue) return message.channel.send('There is no song that I could stop');
+		if (!musicServerQueue) return message.channel.send('There is no song that I could skip');
 		musicServerQueue.connection.dispatcher.pause();
 		const skippedSong = songs.shift();
 		const dispatcher = await musicServerQueue.connection;
 		dispatcher
 			.play(ytdl(songs[0].url))
 			.on('error', (err) => console.log('error', err));
+
 		message.channel.send(`Skipped **${skippedSong.title}** \n Playing **${songs[0].title}**`);
 	},
 };

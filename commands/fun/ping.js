@@ -2,7 +2,7 @@ module.exports = {
 	name: 'ping',
 	cooldown: 5,
 	description: 'ping!',
-	execute(message, args) {
+	execute(message) {
 		return message.channel.send('pong');
 	},
 };

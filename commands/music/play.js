@@ -18,39 +18,21 @@ module.exports = {
 		if (!permission.has('CONNECT')) return message.channel.send('I need permission to join voice channel');
 		if (!permission.has('SPEAK')) return message.channel.send('I need permission to speak in voice channel');
 
-		if (!musicList.size) return this.showLists(message, args, musicList);
+		const num = args[0] * 1;
+		if (!musicList.size || isNaN(num)) return this.showLists(message, args, musicList);
 
-		const songInfo = await ytdl.getInfo(musicList.get(args[0] * 1).id);
+		// if (isNaN(num)) return message.channel.send(`Invalid selection of music. Correct command: **[!play ${args[0].substr(0, 1)}]**`);
+		const songInfo = await ytdl.getInfo(musicList.get(num).id);
+
 		const song = {
 			title: songInfo.videoDetails.title,
 			url: songInfo.videoDetails.video_url,
 		};
-		if (!musicServerQueue) {
-			const queueContruct = {
-				textChannel: message.channel,
-				voiceChannel: channel,
-				connection: null,
-				songs: [],
-				volume: 5,
-				playing: true,
-			};
 
-			musicQueue.set(message.guild.id, queueContruct);
-			queueContruct.songs.push(song);
-
-			try {
-				const connection = await channel.join();
-				queueContruct.connection = connection;
-				await this.play(message.guild, queueContruct.songs[0], musicQueue);
-				return;
-			} catch (err) {
-				console.log(err);
-				this.musicQueue.delete(message.guild.id);
-				return message.channel.send(err);
-			}
-		}
+		if (!musicServerQueue) return this.createServerQueue(message, musicQueue, song);
 
 		musicServerQueue.songs.push(song);
+		musicList.clear();
 		return message.channel.send(`${song.title} has been added to the queue`);
 	},
 	async showLists(message, keyword, musicList) {
@@ -70,6 +52,32 @@ module.exports = {
 		listArr.push('Select 1-5 to play music command **[!play 1]**');
 
 		return message.channel.send(listArr, { split: true });
+	},
+	async createServerQueue(message, musicQueue, song) {
+		try {
+			const { channel } = message.member.voice;
+			const queueContruct = {
+				textChannel: message.channel,
+				voiceChannel: channel,
+				connection: null,
+				songs: [],
+				volume: 5,
+				playing: true,
+			};
+
+			musicQueue.set(message.guild.id, queueContruct);
+			queueContruct.songs.push(song);
+
+			const connection = await channel.join();
+			queueContruct.connection = connection;
+			await this.play(message.guild, queueContruct.songs[0], musicQueue);
+			message.client.musicList.clear();
+			return;
+		} catch (err) {
+			console.log(err);
+			musicQueue.delete(message.guild.id);
+			return message.channel.send(err);
+		}
 	},
 	async play(guild, song, musicQueue) {
 		try {
