@@ -2,6 +2,7 @@ const tenorGif = require('../../helpers/tenorGif');
 
 module.exports = {
 	name: 'emote',
+	aliases: ['gif'],
 	description: 'Send the Gif',
 	async execute(message, args) {
 		try {
