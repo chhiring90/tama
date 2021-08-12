@@ -1,6 +1,7 @@
 module.exports = {
 	name: 'volume',
 	description: 'Controls the audio volume.',
+	usage: '<command>',
 	execute(message, args) {
 		const musicServerQueue = message.client.musicQueue.get(message.guild.id);
 

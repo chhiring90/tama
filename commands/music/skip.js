@@ -3,6 +3,7 @@ const ytdl = require('ytdl-core');
 module.exports = {
 	name: 'skip',
 	description: 'Skips current playing music',
+	usage: '<skip>',
 	async execute(message) {
 		const musicServerQueue = message.client.musicQueue.get(message.guild.id);
 		const { songs } = musicServerQueue;

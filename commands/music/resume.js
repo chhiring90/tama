@@ -1,6 +1,7 @@
 module.exports = {
 	name: 'resume',
 	description: 'Resume the current music',
+	usage: '<command>',
 	execute(message) {
 		const musicServerQueue = message.client.musicQueue.get(message.guild.id);
 		if (!message.member.voice.channel) {

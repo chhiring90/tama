@@ -1,8 +1,9 @@
 module.exports = {
 	name: 'stop',
 	description: 'stop the current playing music',
+	usage: '<command>',
 	aliases: ['pause'],
-	execute(message, args) {
+	execute(message) {
 		const musicServerQueue = message.client.musicQueue.get(message.guild.id);
 		const { songs } = musicServerQueue;
 

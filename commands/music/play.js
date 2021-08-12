@@ -5,7 +5,7 @@ module.exports = {
 	name: 'play',
 	description: 'plays Music from youtube',
 	args: true,
-	usage: '[<command> <musicname>]',
+	usage: '<command> <musicname>',
 	async execute(message, args) {
 		const { musicQueue, musicList } = message.client;
 		const musicServerQueue = musicQueue.get(message.guild.id);
@@ -47,7 +47,7 @@ module.exports = {
 			});
 		});
 
-		listArr.push('**List of Musics**');
+		listArr.push('**List of Musics** 🎵');
 		musicList.map((music, idx) => listArr.push(`**${idx})** ${music.title} ${music.length}`));
 		listArr.push('Select 1-5 to play music command **[!play 1]**');
 
