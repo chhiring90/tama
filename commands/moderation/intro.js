@@ -4,24 +4,25 @@ module.exports = {
 	name: 'intro',
 	description: 'Emmits when guild member adds',
 	execute(message) {
-		const exampleEmbed = new MessageEmbed()
+		const embed = new MessageEmbed()
 			.setColor('#0099ff')
-			.setTitle('Some title')
+			.setTitle('Tama')
 			.setURL('https://discord.js.org/')
-			.setAuthor('Some name', 'https://i.imgur.com/wSTFkRM.png', 'https://discord.js.org')
-			.setDescription('Some description here')
-			.setThumbnail('https://i.imgur.com/wSTFkRM.png')
+			.setAuthor('Chhiring', 'https://images.unsplash.com/photo-1589254065909-b7086229d08c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80', 'https://discord.js.org')
+			.setDescription('If I survive but couldn\'t protect what was important to me, then I might as well be dead.')
+			.setThumbnail('https://images.unsplash.com/photo-1589254065909-b7086229d08c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80')
 			.addFields(
-				{ name: 'Regular field title', value: 'Some value here' },
-				{ name: '\u200B', value: '\u200B' },
-				{ name: 'Inline field title', value: 'Some value here', inline: true },
-				{ name: 'Inline field title', value: 'Some value here', inline: true },
+				{ name: 'Introduction', value: 'Tama is a maidroid working at Otose\'s Snack House. She is often tasked to collect rent from Gintoki by Otose when she isn\'t working.' },
+				// { name: '\u200B', value: '\u200B' },
+				{ name: 'Race', value: 'Robot', inline: true },
+				{ name: 'Status', value: 'Active', inline: true },
+				{ name: 'Gender', value: 'Female', inline: true },
 			)
-			.addField('Inline field title', 'Some value here', true)
-			.setImage('https://i.imgur.com/wSTFkRM.png')
+			// .addField('Inline field title', 'Some value here', true)
+			.setImage('https://images.unsplash.com/photo-1589254065909-b7086229d08c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80')
 			.setTimestamp()
-			.setFooter('Some footer text here', 'https://i.imgur.com/wSTFkRM.png');
+			.setFooter('I promised, didn\'t', 'https://images.unsplash.com/photo-1589254065909-b7086229d08c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80');
 
-		message.channel.send(exampleEmbed);
+		message.channel.send(embed);
 	},
 };

@@ -1,10 +1,11 @@
 const ytdl = require('ytdl-core');
+const catchAsync = require('../../helpers/catchAsync');
 
 module.exports = {
 	name: 'skip',
 	description: 'Skips current playing music',
 	usage: '<skip>',
-	async execute(message) {
+	execute: catchAsync(async (message) => {
 		const musicServerQueue = message.client.musicQueue.get(message.guild.id);
 		const { songs } = musicServerQueue;
 
@@ -16,10 +17,8 @@ module.exports = {
 		musicServerQueue.connection.dispatcher.pause();
 		const skippedSong = songs.shift();
 		const dispatcher = await musicServerQueue.connection;
-		dispatcher
-			.play(ytdl(songs[0].url))
-			.on('error', (err) => console.log('error', err));
+		dispatcher.play(ytdl(songs[0].url));
 
 		message.channel.send(`Skipped **${skippedSong.title}** \n Playing **${songs[0].title}**`);
-	},
+	}),
 };
