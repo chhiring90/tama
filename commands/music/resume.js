@@ -9,7 +9,7 @@ module.exports = {
 		}
 		if (!musicServerQueue) return message.channel.send('There is no song that I could resume');
 		musicServerQueue.connection.dispatcher.resume();
-		const songs = musicServerQueue;
+		const { songs } = musicServerQueue;
 
 		message.channel.send(`Playing: ⏯️ **${songs[0]}**`);
 	},
