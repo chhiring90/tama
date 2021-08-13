@@ -12,6 +12,6 @@ module.exports = {
 		if (!musicServerQueue) return message.channel.send('There is no music playing currently');
 		musicServerQueue.connection.dispatcher.setVolume(args[0] * 1 / 100);
 
-		message.channel.send(`Volume 🔊 ${args[0]}%`);
+		message.channel.send(`Volume: 🔊 **${args[0]}%**`);
 	},
 };

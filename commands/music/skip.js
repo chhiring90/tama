@@ -19,6 +19,6 @@ module.exports = {
 		const dispatcher = await musicServerQueue.connection;
 		dispatcher.play(ytdl(songs[0].url));
 
-		message.channel.send(`Skipped **${skippedSong.title}** \n Playing **${songs[0].title}**`);
+		message.channel.send(`Skipped: ⏭️ **${skippedSong.title}** \n Playing **${songs[0].title}**`);
 	}),
 };

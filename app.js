@@ -40,3 +40,7 @@ client.login(TAMA_TOKEN);
 process.on('unhandledRejection', error => {
 	console.error('Unhandled promise rejection:', error);
 });
+
+process.on('SIGTERM', () => {
+	console.log('🐱‍🏍 SIGTERM RECEIVED. Shutting down gracefully');
+});

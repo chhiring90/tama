@@ -11,6 +11,6 @@ module.exports = {
 		musicServerQueue.connection.dispatcher.resume();
 		const songs = musicServerQueue;
 
-		message.channel.send(`Playing: **${songs[0]}**`);
+		message.channel.send(`Playing: ⏯️ **${songs[0]}**`);
 	},
 };

@@ -14,6 +14,6 @@ module.exports = {
 		if (!musicServerQueue) return message.channel.send('There is no song that I could stop');
 		musicServerQueue.connection.dispatcher.pause();
 
-		message.channel.send(`Paused: **${songs[0].title}**`);
+		message.channel.send(`Paused: ⏸️ **${songs[0].title}**`);
 	},
 };
